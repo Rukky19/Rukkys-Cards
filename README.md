@@ -1,22 +1,20 @@
 # Rukky's Card Table
 
-A Next.js port of the Crazy Eights prototype for a custom 52-card deck.
+A Next.js App Router port of the Crazy Eights practice prototype.
 
 ## Run locally
 ```bash
 npm install
 npm run dev
 ```
-
 Open http://localhost:3000.
 
-## Card artwork
-Place the 52 optimized WebP card faces in `public/cards/` using the existing filenames (for example `AS.webp`, `10H.webp`, `JC.webp`, `QS.webp`), plus `BACK.webp`. The UI has a text fallback until artwork is present. Keep the corrected face-card mappings: `JC` is Jack of Clubs, `QS` is Queen of Spades, and `QC` is Queen of Clubs.
+## Current status
+- **Implemented in this commit:** Next.js + TypeScript app shell, responsive Crazy Eights table, local solo practice logic, suit picker, hints, rules, win/loss state, and the prominent NO PLAY notice.
+- **Not yet implemented:** functional online multiplayer. The room UI is a placeholder; it does not currently create a playable shared room. Supabase setup notes are a future integration guide, not a working multiplayer service.
+- **Artwork:** the original 52-card WebP deck and hills background are not yet committed to `public/cards/`. The interface currently falls back to simple card placeholders. The source archive is `rukky-crazy-eights-v0.6-hills.zip`; preserve its corrected filenames (`JC` = Jack of Clubs, `QS` = Queen of Spades, `QC` = Queen of Clubs) when adding the assets.
 
-## Online rooms
-Online room sync uses Supabase Realtime Broadcast. Create a Supabase project, copy its project URL and anon key into `.env.local` using the names in `.env.example`, and enable Realtime for anonymous public channels. For production, add server-authoritative validation and room access controls before using this for competitive play. The solo game works without Supabase.
-
-## Current scope
-- Solo Crazy Eights against a practice opponent.
-- Private room-code interface and Supabase broadcast adapter scaffold.
-- Mobile-friendly layout and custom card-art path support.
+## Next steps
+1. Add the original WebP deck and background to the public assets folder.
+2. Implement authoritative private rooms, seat assignment, state sync, and reconnect handling with Supabase Realtime plus server-side validation.
+3. Run a production build and test desktop/mobile gameplay.
