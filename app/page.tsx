@@ -29,7 +29,10 @@ export default function Home() {
   useEffect(() => {
     if (game.message.startsWith("🚫 NO PLAY!") || game.message.startsWith("Your partner played")) {
       setShowOpponentTile(true);
+      const timeout = window.setTimeout(() => setShowOpponentTile(false), 2800);
+      return () => window.clearTimeout(timeout);
     }
+    setShowOpponentTile(false);
   }, [game.message]);
 
   useEffect(() => {
@@ -100,7 +103,7 @@ export default function Home() {
     </section>
     {game.hints && <aside className="hint"><b>Quick lesson:</b> Crazy Eights is a shedding game. Be the first to get rid of all your cards. Match the top card&apos;s suit or rank. Eights are wild and let you choose the next suit.</aside>}
     {showRules && <section className="rules"><h2>How to play Crazy Eights</h2><ol><li>Each player starts with seven cards.</li><li>Play a card matching the top discard&apos;s suit or rank.</li><li>An eight is wild. Play it anytime and choose the next suit.</li><li>If you cannot play, draw one card. If it is playable, you may play it immediately.</li><li>First player to empty their hand wins.</li></ol></section>}
-    {showOpponentTile && <div className="modal-backdrop opponent-notice-backdrop"><section className={`opponent-notice-tile ${game.message.startsWith("Your partner played") ? "played" : "no-play"}`} role="alertdialog" aria-live="assertive"><span className="notice-kicker">OPPONENT ACTION</span><h2>{game.message.startsWith("Your partner played") ? "CARD PLAYED" : "NO PLAY!"}</h2><p>{game.message.startsWith("Your partner played") ? game.message.replace("Your partner played ", "Your partner played ").replace(" Your turn.", ".") : game.message.replace("🚫 NO PLAY! ", "")}</p><button className="pill primary" onClick={() => setShowOpponentTile(false)}>Got it</button></section></div>}
+    {showOpponentTile && <section className={`opponent-notice-tile toast ${game.message.startsWith("Your partner played") ? "played" : "no-play"}`} aria-live="polite"><span className="notice-kicker">OPPONENT ACTION</span><h2>{game.message.startsWith("Your partner played") ? "CARD PLAYED" : "NO PLAY!"}</h2><p>{game.message.startsWith("Your partner played") ? game.message.replace("Your partner played ", "Your partner played ").replace(" Your turn.", ".") : game.message.replace("🚫 NO PLAY! ", "")}</p></section>}
     {pendingEight && <div className="modal-backdrop"><section className="modal"><h2>Choose the next suit</h2><p>Your eight is wild. Which suit should your partner play?</p><div className="suit-options">{(["S","H","D","C"] as Suit[]).map(s => <button key={s} className={isRed(s) ? "red" : ""} onClick={() => chooseSuit(s)}>{SYMBOL[s]}</button>)}</div></section></div>}
     {game.status !== "playing" && <div className="modal-backdrop"><section className="modal"><h2>{game.status === "won" ? "You win! 🎉" : "Your partner wins"}</h2><p>{game.message}</p><button className="pill primary" onClick={newGame}>Play again</button></section></div>}
     <footer>Your deck, your rules, your table. ♠ ♥ ♦ ♣</footer>
