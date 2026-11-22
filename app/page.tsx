@@ -92,6 +92,7 @@ export default function Home() {
     <section className="felt">
       <div className="opponent-row"><div><span className="who">Your playing partner</span><small>{game.opponentHand.length} cards · {mode === "solo" ? "practice opponent" : "online seat"}</small></div><span className="status">{game.turn === "opponent" ? "Playing…" : "Waiting"}</span></div>
       <div className="opponent-hand">{Array.from({ length: game.opponentHand.length }, (_, i) => <PlayingCard key={i} back />)}</div>
+      {showOpponentTile && <section className={`opponent-notice-tile under-opponent ${game.message.startsWith("Your partner played") ? "played" : "no-play"}`} aria-live="polite"><span className="notice-kicker">OPPONENT ACTION</span><h2>{game.message.startsWith("Your partner played") ? "CARD PLAYED" : "NO PLAY!"}</h2><p>{game.message.startsWith("Your partner played") ? game.message.replace("Your partner played ", "Your partner played ").replace(" Your turn.", ".") : game.message.replace("🚫 NO PLAY! ", "")}</p></section>}
       <div className="table-middle">
         <div className="pile"><small>DRAW PILE · {game.deck.length}</small><PlayingCard back onClick={game.turn === "you" ? draw : undefined} /></div>
         <div className="turn-label">{game.status === "playing" ? game.turn === "you" ? "Your turn" : "Partner's turn" : "Round over"}<small>Match suit or number</small></div>
@@ -103,7 +104,7 @@ export default function Home() {
     </section>
     {game.hints && <aside className="hint"><b>Quick lesson:</b> Crazy Eights is a shedding game. Be the first to get rid of all your cards. Match the top card&apos;s suit or rank. Eights are wild and let you choose the next suit.</aside>}
     {showRules && <section className="rules"><h2>How to play Crazy Eights</h2><ol><li>Each player starts with seven cards.</li><li>Play a card matching the top discard&apos;s suit or rank.</li><li>An eight is wild. Play it anytime and choose the next suit.</li><li>If you cannot play, draw one card. If it is playable, you may play it immediately.</li><li>First player to empty their hand wins.</li></ol></section>}
-    {showOpponentTile && <section className={`opponent-notice-tile under-opponent ${game.message.startsWith("Your partner played") ? "played" : "no-play"}`} aria-live="polite"><span className="notice-kicker">OPPONENT ACTION</span><h2>{game.message.startsWith("Your partner played") ? "CARD PLAYED" : "NO PLAY!"}</h2><p>{game.message.startsWith("Your partner played") ? game.message.replace("Your partner played ", "Your partner played ").replace(" Your turn.", ".") : game.message.replace("🚫 NO PLAY! ", "")}</p></section>}
+    
     {pendingEight && <div className="modal-backdrop"><section className="modal"><h2>Choose the next suit</h2><p>Your eight is wild. Which suit should your partner play?</p><div className="suit-options">{(["S","H","D","C"] as Suit[]).map(s => <button key={s} className={isRed(s) ? "red" : ""} onClick={() => chooseSuit(s)}>{SYMBOL[s]}</button>)}</div></section></div>}
     {game.status !== "playing" && <div className="modal-backdrop"><section className="modal"><h2>{game.status === "won" ? "You win! 🎉" : "Your partner wins"}</h2><p>{game.message}</p><button className="pill primary" onClick={newGame}>Play again</button></section></div>}
     <footer>Your deck, your rules, your table. ♠ ♥ ♦ ♣</footer>
